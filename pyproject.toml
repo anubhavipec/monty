@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "image-service"
+version = "0.1.0"
+description = "Scalable S3 and DynamoDB image upload service"
+authors = ["Anubhav Gupta <aanubhav04@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.128.0"
+uvicorn = "^0.40.0"
+boto3 = "^1.42.26"
+python-multipart = "^0.0.21"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.0.2"
+requests = "^2.32.5"
+awscli-local = "^0.22.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
