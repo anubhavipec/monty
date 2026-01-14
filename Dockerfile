@@ -1,23 +1,24 @@
-# Use a lightweight Python base image
-FROM python:3.9-slim
+FROM python:3.11-slim
 
-# Install poetry
-RUN pip install poetry
+# 1. Install the Lambda Web Adapter
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.8.3 /lambda-adapter /opt/extensions/lambda-adapter
 
-# Set working directory
 WORKDIR /app
 
-# Copy dependency files first (for better caching)
+# 2. Install poetry
+RUN pip install poetry
+
+# 3. Copy only dependency files
 COPY pyproject.toml poetry.lock* /app/
 
-# Config poetry: don't create virtualenv inside container
-RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
+# 4. Install dependencies (Crucial: note the space before --no-root)
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi --no-root
 
-# Copy the rest of the application
+# 5. Copy the rest of the application code
 COPY . /app
 
-# Expose the port FastAPI runs on
+ENV PORT=8000
 EXPOSE 8000
 
-# Command to run the application
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

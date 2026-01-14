@@ -29,7 +29,7 @@ class ImageService:
         
         # 1. Stream file directly to S3
         s3.upload_fileobj(file_obj, settings.BUCKET_NAME, s3_key)
-        
+    
         # 2. Save Metadata to DynamoDB
         metadata = {
             "image_id": image_id,

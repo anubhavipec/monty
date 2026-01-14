@@ -13,3 +13,19 @@ services:
     volumes:
       - "./localstack_data:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh"
+
+  api:
+    build: .
+    container_name: instagram_service
+    ports:
+      - "8000:8000"
+    environment:
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+      - BUCKET_NAME=user-images
+      - TABLE_NAME=ImageMetadata
+    depends_on:
+      - localstack
